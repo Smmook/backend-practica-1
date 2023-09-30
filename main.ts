@@ -1,3 +1,5 @@
+import { assertEquals } from "https://deno.land/std@0.202.0/assert/mod.ts";
+
 // SPACE SPEED
 
 // Ejer 1
@@ -145,4 +147,69 @@ const obtenerFechas = (arr: any[]): number[] => {
   );
 };
 
-console.log(obtenerFechas(datosRecibidos));
+// console.log(obtenerFechas(datosRecibidos));
+
+// Ejer 2
+interface fecha {
+  anio: number;
+  mes: number;
+  dia: number;
+  hora: number;
+  minuto: number;
+  segundo: number;
+}
+
+const fechasRecibidas: fecha[] = obtenerFechas(datosRecibidos).map((e) => {
+  return {
+    anio: e,
+    mes: 1,
+    dia: 1,
+    hora: 0,
+    minuto: 0,
+    segundo: 0,
+  };
+});
+
+// console.log(fechasRecibidas);
+
+// THE TROUBLE WITH TRIBBLES
+
+interface TurboConducto {
+  imperfectos: number;
+  tribbles: number;
+}
+
+const listado: TurboConducto[] = [
+  { imperfectos: 22, tribbles: 15 },
+  { imperfectos: 18, tribbles: 25 },
+  { imperfectos: 25, tribbles: 8 },
+  { imperfectos: 30, tribbles: 12 },
+  { imperfectos: 10, tribbles: 18 },
+];
+
+const totalTribbles = (listado: TurboConducto[]): number => {
+  return listado.reduce(
+    (acc, e) => e.imperfectos > 20 ? acc + e.tribbles : acc,
+    0,
+  );
+};
+
+// No entiendo muy bien el tipo de dato que pides para este ejercicio.
+// Lo he hecho asi para usar el flat con sentido, pero es equivalente al flatMap de debajo, por lo que dejo los dos
+
+const senialLisa = (listado: TurboConducto[]): number[] => {
+  const values = listado.map((e) => Object.values(e));
+  return values.flat();
+};
+
+// Igual pero directo con flatmap
+const senialLisaFlatMap = (listado: TurboConducto[]): number[] => {
+  return listado.flatMap((e) => Object.values(e));
+};
+
+// Entiendo que esperas que se use un flatmap aqui, pero con como he definido el listado no tiene mucho sentido, por lo que hago map
+const senialLisaPeligro = (listado: TurboConducto[]): string[] => {
+  return listado.map((e) =>
+    e.tribbles > 1.5 * e.imperfectos ? "peligro" : "no hay peligro"
+  );
+};
