@@ -65,7 +65,7 @@ const numeroTripulantesConNombre = (lista: tripulante[]): number => {
   );
 };
 
-const datosTripulantesConNombre = (lista: tripulante[]): void => {
+const imprimirDatosTripulantesConNombre = (lista: tripulante[]): void => {
   lista.filter((p: tripulante) => p.nombre ? true : false).forEach(
     (p: tripulante, n: number) => {
       const keys = Object.keys(p);
@@ -81,7 +81,7 @@ const datosTripulantesConNombre = (lista: tripulante[]): void => {
 };
 
 // console.log("Numero de tripulantes con nombre: " + numeroTripulantesConNombre(enterprise.pasajeros));
-// console.log("Datos de los tripulantes con nombre: " + datosTripulantesConNombre(enterprise.pasajeros));
+// console.log("Datos de los tripulantes con nombre: " + imprimirDatosTripulantesConNombre(enterprise.pasajeros));
 
 // THE SIDE OF PARDADISE
 
@@ -198,13 +198,13 @@ const totalTribbles = (listado: TurboConducto[]): number => {
 // Lo he hecho asi para usar el flat con sentido, pero es equivalente al flatMap de debajo, por lo que dejo los dos
 
 const senialLisa = (listado: TurboConducto[]): number[] => {
-  const values = listado.map((e) => Object.values(e));
+  const values = listado.map((e, i) => [i + 1, ...Object.values(e)]);
   return values.flat();
 };
 
 // Igual pero directo con flatmap
 const senialLisaFlatMap = (listado: TurboConducto[]): number[] => {
-  return listado.flatMap((e) => Object.values(e));
+  return listado.flatMap((e, i) => [i + 1, ...Object.values(e)]);
 };
 
 // Entiendo que esperas que se use un flatmap aqui, pero con como he definido el listado no tiene mucho sentido, por lo que hago map
@@ -213,3 +213,68 @@ const senialLisaPeligro = (listado: TurboConducto[]): string[] => {
     e.tribbles > 1.5 * e.imperfectos ? "peligro" : "no hay peligro"
   );
 };
+
+// TESTING
+
+Deno.test("Obtener numero de tripulantes con nombre", () => {
+  assertEquals(4, numeroTripulantesConNombre(enterprise.pasajeros));
+});
+
+const tripulantesTesting: tripulanteYSalud[] = [
+  {
+    nombre: "Eve",
+    altura: 170,
+    edad: 32,
+    peso: 60,
+    genero: "Femenino",
+    infectado: false,
+  },
+  {
+    origen: "Venus",
+    altura: 185,
+    edad: 45,
+    peso: 90,
+    genero: "Femenino",
+    infectado: false,
+  },
+  { altura: 155, edad: 26, peso: 48, genero: "Femenino", infectado: true },
+];
+
+Deno.test("Comprobar si hay algun infectado", () => {
+  assertEquals(algunInfectado(tripulantesTesting), true);
+});
+
+Deno.test("Comprobar si todos estan sanos", () => {
+  assertEquals(todosSanos(tripulantesTesting), false);
+});
+
+Deno.test("Obtener proximo infectado en lista", () => {
+  assertEquals(proximoInfectado(tripulantesTesting), tripulantesTesting[2]);
+});
+
+Deno.test("Filtrar fechas de lista de datos", () => {
+  assertEquals(obtenerFechas([1234, "Hola", 1.34, 2023]), [1234, 2023]);
+});
+
+const turboTest: TurboConducto[] = [
+  { imperfectos: 22, tribbles: 15 },
+  { imperfectos: 18, tribbles: 40 },
+  { imperfectos: 25, tribbles: 8 },
+];
+
+Deno.test("Total de tribbles en turbo conductos con mas de 20 fallos", () => {
+  assertEquals(totalTribbles(turboTest), 23);
+});
+
+Deno.test("Obtener senal lisa de lista de turboconductos", () => {
+  assertEquals(senialLisa(turboTest), [1, 22, 15, 2, 18, 40, 3, 25, 8]);
+  assertEquals(senialLisaFlatMap(turboTest), [1, 22, 15, 2, 18, 40, 3, 25, 8]);
+});
+
+Deno.test("Obtener senal lisa de peligro", () => {
+  assertEquals(senialLisaPeligro(turboTest), [
+    "no hay peligro",
+    "peligro",
+    "no hay peligro",
+  ]);
+});
