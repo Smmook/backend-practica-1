@@ -83,6 +83,7 @@ const datosTripulantesConNombre = (lista: tripulante[]): void => {
 
 // THE SIDE OF PARDADISE
 
+// Ejer 1
 interface tripulanteYSalud extends tripulante {
   infectado: boolean;
 }
@@ -95,3 +96,53 @@ const tripulantes2: tripulanteYSalud[] = enterprise.pasajeros.map(
     };
   },
 );
+
+const mostrarTripulantesSanos = (tripulantes: tripulanteYSalud[]): void => {
+  tripulantes.forEach((t) => !t.infectado && t.nombre && console.log(t.nombre));
+};
+
+// console.log("Tripulantes sanos:");
+// mostrarTripulantesSanos(tripulantes2);
+
+// Ejer 2
+
+const algunInfectado = (tripulantes: tripulanteYSalud[]): boolean => {
+  return tripulantes.some((t) => t.infectado);
+};
+
+const todosSanos = (tripulantes: tripulanteYSalud[]): boolean => {
+  return tripulantes.every((t) => !t.infectado);
+};
+
+const proximoInfectado = (
+  tripulantes: tripulanteYSalud[],
+): tripulanteYSalud | undefined => {
+  return tripulantes.find((t) => t.infectado);
+};
+
+// THE CITY ON THE EDGE OF FOREVER
+
+// Ejer 1
+
+const datosRecibidos: any[] = [
+  "Hola",
+  412,
+  3.14,
+  true,
+  "Mundo",
+  700,
+  2.71,
+  false,
+  "¡Hola de nuevo!",
+  1000,
+  1.618,
+  true,
+];
+
+const obtenerFechas = (arr: any[]): number[] => {
+  return arr.filter((e) =>
+    (typeof e === "number") && Number.isInteger(e) && e >= 0
+  );
+};
+
+console.log(obtenerFechas(datosRecibidos));
